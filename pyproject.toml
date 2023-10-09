@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "finance-bot"
+version = "0.1.0"
+description = ""
+authors = ["ivan-karaberov"]
+readme = "README.md"
+packages = [{include = "finance_bot"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
