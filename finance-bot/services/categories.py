@@ -1,6 +1,6 @@
 from typing import Dict, List, NamedTuple
 
-import db 
+import db
 
 class Category(NamedTuple):
     """Структура категории"""
