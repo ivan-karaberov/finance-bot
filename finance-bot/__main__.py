@@ -15,6 +15,7 @@ COMMAND_HANDLERS = {
     "help": handlers.help,
     "add_expense": handlers.add_expense,
     "get_daily_limit": handlers.get_daily_limit,
+    "set_daily_limit": handlers.set_daily_limit
 }
 
 logging.basicConfig(

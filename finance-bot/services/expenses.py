@@ -16,12 +16,19 @@ async def _get_budget_limit() -> int:
     return limit["daily_limit"]
 
 
+async def _set_budget_limit(sum: int) -> None:
+    """Возвращает дневной бюджет на день"""
+    sql = f"""UPDATE budget SET daily_limit={sum} WHERE codename = 'base'"""
+    await db.execute(sql)
+
+
+
 def _get_now_formatted() -> str:
     """Возвращает настоящую Дату и время строкой"""
     return _get_now_datetime().strftime(config.DATETIME_FORMAT)
 
 
-def _get_now_datetime():
+def _get_now_datetime() -> datetime.datetime:
     """Возвращает настоящую Дату и время"""
     tz = pytz.tz(config.TIMEZONE)
     return datetime.datetime.now(tz)
