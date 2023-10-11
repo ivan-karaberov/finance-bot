@@ -1,18 +1,28 @@
 import asyncio
+import logging 
+import traceback
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 
-from services.filters import UserFilter
 import config
 import handlers
-
+from db import close_db
+from services.filters import UserFilter
 
 COMMAND_HANDLERS = {
     "start": handlers.start,
     "help": handlers.help,
     "add_expense": handlers.add_expense,
+    "get_daily_limit": handlers.get_daily_limit,
 }
+
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", 
+    level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
 
 
 def register_message_handlers(dp: Dispatcher) -> None:
@@ -33,4 +43,9 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except Exception:
+        logger.warning(traceback.format_exc())
+    finally:
+        close_db()
