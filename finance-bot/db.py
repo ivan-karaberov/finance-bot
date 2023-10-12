@@ -43,7 +43,7 @@ async def execute(sql: LiteralString, params: Iterable[Any] | None = None, *,
     args = (sql, params)
     await db.execute(*args)
     if autocommit:
-        db.commit()
+        await db.commit()
 
 
 async def _get_cursor(sql: LiteralString, 

@@ -14,8 +14,10 @@ COMMAND_HANDLERS = {
     "start": handlers.start,
     "help": handlers.help,
     "add_expense": handlers.add_expense,
+    "delete_expense": handlers.delete_expense,
     "get_daily_limit": handlers.get_daily_limit,
-    "set_daily_limit": handlers.set_daily_limit
+    "set_daily_limit": handlers.set_daily_limit,
+    "last": handlers.last
 }
 
 logging.basicConfig(
@@ -23,7 +25,6 @@ logging.basicConfig(
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
-
 
 
 def register_message_handlers(dp: Dispatcher) -> None:

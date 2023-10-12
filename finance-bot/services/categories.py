@@ -1,3 +1,5 @@
+import asyncio
+
 from typing import Dict, List, NamedTuple
 
 import db
@@ -11,13 +13,10 @@ class Category(NamedTuple):
     
 
 class Categories:
-    async def __init__(self):
-        self._categories = await self._load_categories()
-
     async def _load_categories(self) -> List[Category]:
         """Возвращает справочник категорий из БД"""
-        categories = await db.fetchall(
-            "category", ["codename", "name", "is_base_expense", "aliases"]
+        categories = await db.fetch_all(
+            """SELECT codename, name, is_base_expense, aliases FROM category"""
         )
         categories = self._fill_aliases(categories)
         return categories
@@ -26,15 +25,17 @@ class Categories:
         """Заполняет aliases для каждой категории."""
         categories_result = []
         for category in categories:
-            aliases = category["aliase"].split(",")
+            aliases = category["aliases"].split(",")
             aliases = list(filter(None, map(str.strip, aliases)))
             aliases.append(category["codename"])
             aliases.append(category["name"])
             categories_result.append(
-                codename=category['codename'],
-                name=category['name'],
-                is_base_expense=category['is_base_expense'],
-                aliases=aliases
+                Category(
+                    codename=category['codename'],
+                    name=category['name'],
+                    is_base_expense=category['is_base_expense'],
+                    aliases=aliases
+                )
             )
         return categories_result
 
@@ -42,10 +43,11 @@ class Categories:
         """Возвращает справочник категорий"""
         return self._categories
 
-    def get_category(self, category_name: str) -> Category:
+    async def get_category(self, category_name: str) -> Category:
+        _categories = await self._load_categories()
         finded = None
         other_category = None
-        for category in self._categories:
+        for category in _categories:
             if category.codename == 'other':
                 other_category = category
             for alias in category.aliases:
