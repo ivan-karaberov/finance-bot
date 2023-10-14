@@ -1,8 +1,7 @@
-import asyncio
-
-from typing import Dict, List, NamedTuple
+from typing import List, NamedTuple
 
 import db
+
 
 class Category(NamedTuple):
     """Структура категории"""
@@ -10,7 +9,7 @@ class Category(NamedTuple):
     name: str
     is_base_expense: bool
     aliases: List[str]
-    
+
 
 class Categories:
     async def _load_categories(self) -> List[Category]:
@@ -22,7 +21,7 @@ class Categories:
         return categories
 
     def _fill_aliases(self, categories: List[Category]) -> List[Category]:
-        """Заполняет aliases для каждой категории."""
+        """Заполняет aliases для каждой категории"""
         categories_result = []
         for category in categories:
             aliases = category["aliases"].split(",")
@@ -39,23 +38,21 @@ class Categories:
             )
         return categories_result
 
-    def get_all_categories(self) -> List[Category]:
-        """Возвращает справочник категорий"""
-        return self._categories
-
     async def get_category(self, category_name: str) -> Category:
-        _categories = await self._load_categories()
+        """Возвращает категорию по назаванию категории"""
         finded = None
         other_category = None
-        for category in _categories:
+        categories = await self._load_categories()
+
+        for category in categories:
             if category.codename == 'other':
                 other_category = category
             for alias in category.aliases:
                 if category_name == alias:
                     finded = category
-                    break          
+                    break
+
         if not finded:
             finded = other_category
-        return finded
 
-    
+        return finded

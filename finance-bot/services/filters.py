@@ -3,6 +3,8 @@ from aiogram.types import Message
 
 
 class UserFilter(BaseFilter):
+    """Аунтификация пользователя по ID"""
+
     def __init__(self, access_id: int) -> None:
         self._access_id = access_id
 

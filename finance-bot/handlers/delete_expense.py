@@ -2,11 +2,14 @@ from aiogram.types import Message
 
 from templates import render_template
 from services.expenses import _delete_expense
+from exceptions import NotCorrectMessage, DoesNotExists
+
 
 async def delete_expense(message: Message) -> None:
-    str = message.text.split()
-    if len(str) > 1 and str[1].isnumeric():
-        await _delete_expense(int(str[1]))
+    try:
+        await _delete_expense(message.text)
         await message.answer(render_template('delete_expense.j2'))
-    else:
-        await message.answer(render_template('delete_expense_incorrect.j2'))
+    except DoesNotExists:
+        await message.answer(render_template("delete_expense_not_exists.j2"))
+    except NotCorrectMessage:
+        await message.answer(render_template("delete_expense_incorrect.j2"))

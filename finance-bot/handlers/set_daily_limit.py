@@ -1,12 +1,13 @@
 from aiogram.types import Message
 
 from templates import render_template
-from services.expenses import _set_budget_limit
+from services.expenses import _set_daily_limit
+from exceptions import NotCorrectMessage
+
 
 async def set_daily_limit(message: Message) -> None:
-    str = message.text.split()
-    if len(str) > 1 and str[1].isnumeric():
-        await _set_budget_limit(int(str[1]))
+    try:
+        await _set_daily_limit(message.text)
         await message.answer(render_template('set_daily_limit.j2'))
-    else: 
+    except NotCorrectMessage:
         await message.answer(render_template('set_daily_limit_incorrect.j2'))

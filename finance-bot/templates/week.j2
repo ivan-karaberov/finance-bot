@@ -1,0 +1,8 @@
+Статистика за неделю 🏙<br><br>
+Траты по категориям:<br>
+{% for expense in expenses.statisctic %}
+{{expense.category_name}} - {{expense.amount}} руб. <br>
+{% endfor %}
+<br>
+Всего потрачено - {{expenses.all_expense}} руб.<br>
+Базовые траты - {{expenses.base}} руб. из {{expenses.daily_limit}} руб.

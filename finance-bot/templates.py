@@ -17,11 +17,12 @@ def render_template(template_name: str, data: dict | None = None) -> str:
     return rendered
 
 
-def _get_template_env():
+def _get_template_env() -> jinja2.Environment:
     if not getattr(_get_template_env, "template_env", None):
         template_loader = jinja2.FileSystemLoader(
             searchpath=config.TEMPLATES_DIR
         )
+
         env = jinja2.Environment(
             loader=template_loader,
             trim_blocks=True,

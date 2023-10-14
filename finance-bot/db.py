@@ -10,13 +10,13 @@ import config
 
 async def get_db() -> aiosqlite.Connection:
     if not getattr(get_db, "db", None):
-        db = await aiosqlite.connect(config.SQLITE_DB_FILE) 
+        db = await aiosqlite.connect(config.SQLITE_DB_FILE)
         get_db.db = db
 
     return get_db.db
 
 
-async def fetch_all(sql: LiteralString, 
+async def fetch_all(sql: LiteralString,
                     params: Iterable[Any] | None = None) -> list[dict]:
     cursor = await _get_cursor(sql, params)
     rows = await cursor.fetchall()
@@ -27,7 +27,7 @@ async def fetch_all(sql: LiteralString,
     return results
 
 
-async def fetch_one(sql: LiteralString, 
+async def fetch_one(sql: LiteralString,
                     params: Iterable[Any] | None = None) -> dict | None:
     cursor = await _get_cursor(sql, params)
     row = await cursor.fetchone()
@@ -37,7 +37,7 @@ async def fetch_one(sql: LiteralString,
     return row
 
 
-async def execute(sql: LiteralString, params: Iterable[Any] | None = None, *, 
+async def execute(sql: LiteralString, params: Iterable[Any] | None = None, *,
                   autocommit: bool = True) -> None:
     db = await get_db()
     args = (sql, params)
@@ -46,7 +46,7 @@ async def execute(sql: LiteralString, params: Iterable[Any] | None = None, *,
         await db.commit()
 
 
-async def _get_cursor(sql: LiteralString, 
+async def _get_cursor(sql: LiteralString,
                       params: Iterable[Any] | None) -> aiosqlite.Cursor:
     db = await get_db()
     args = (sql, params)
@@ -56,7 +56,7 @@ async def _get_cursor(sql: LiteralString,
 
 
 def _get_result_with_columns_names(cursor: aiosqlite.Cursor,
-                                         row: aiosqlite.Row) -> dict:
+                                   row: aiosqlite.Row) -> dict:
     column_names = [d[0] for d in cursor.description]
     resulting_row = {}
     for index, column in enumerate(column_names):
@@ -80,10 +80,12 @@ async def _init_db() -> None:
     await db.executescript(sql)
     await db.commit()
 
+
 async def check_db_exists() -> None:
     """Проверяет инициализированна ли БД, если нет инициализирует"""
     row = await fetch_one("SELECT name FROM sqlite_master")
     if row is None:
         await _init_db()
+
 
 asyncio.run(check_db_exists())

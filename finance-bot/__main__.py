@@ -1,5 +1,5 @@
 import asyncio
-import logging 
+import logging
 import traceback
 
 from aiogram import Bot, Dispatcher
@@ -18,15 +18,16 @@ COMMAND_HANDLERS = {
     "get_daily_limit": handlers.get_daily_limit,
     "set_daily_limit": handlers.set_daily_limit,
     "last": handlers.last,
-    "week": handlers.week, 
+    "week": handlers.week,
     "month": handlers.month,
     "day": handlers.day,
 }
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", 
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO
 )
+
 logger = logging.getLogger(__name__)
 
 

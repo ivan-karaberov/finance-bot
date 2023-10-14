@@ -1,0 +1,5 @@
+Последние траты: <br><br>
+(id категория сумма)<br><br>
+{% for expense in expenses %}
+{{expense.id}} {{expense.category_name}} {{expense.amount}} <br>
+{% endfor %}
