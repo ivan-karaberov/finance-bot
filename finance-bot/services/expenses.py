@@ -64,6 +64,70 @@ async def _last() -> List[Expense]:
     return results
 
 
+async def _day() -> str:
+    now = _get_now_datetime()
+    today = f'{now.year:04d}-{now.month:02d}-{now.day}'
+    sql = f"""SELECT category_codename, sum(amount) FROM expense
+             WHERE date(created) >= '{today}' GROUP BY category_codename;"""
+    rows = await db.fetch_all(sql)
+    sum = 0
+    string = ''
+    for row in rows:
+        string += row["category_codename"] + ' - ' + str(row["sum(amount)"]) + "руб.\n"
+        sum += row["sum(amount)"]
+    sql = f"""SELECT sum(amount) FROM expense
+              WHERE date(created) >= '{today}' and category_codename in (select codename from category where is_base_expense=true)"""
+    rows = await db.fetch_one(sql)
+    base_today_expenses = rows["sum(amount)"] if rows["sum(amount)"] else 0
+    return (f"{string}"
+            f"Всего - {sum} руб."
+            f"базовые - {base_today_expenses} руб. из"
+            f"{await _get_budget_limit()} руб.")
+
+
+async def _week() -> str:
+    now = _get_now_datetime()
+    monday = now - datetime.timedelta(datetime.datetime.weekday(now))
+    first_day_of_week = f'{now.year:04d}-{now.month:02d}-{monday.day:02d}'
+    sql = f"""SELECT category_codename, sum(amount) FROM expense
+             WHERE date(created) >= '{first_day_of_week}' GROUP BY category_codename;"""
+    rows = await db.fetch_all(sql)
+    sum = 0
+    string = ''
+    for row in rows:
+        string += row["category_codename"] + ' - ' + str(row["sum(amount)"]) + "руб.\n"
+        sum += row["sum(amount)"]
+    sql = f"""SELECT sum(amount) FROM expense
+              WHERE date(created) >= '{first_day_of_week}' and category_codename in (select codename from category where is_base_expense=true)"""
+    rows = await db.fetch_one(sql)
+    base_today_expenses = rows["sum(amount)"] if rows["sum(amount)"] else 0
+    return (f"{string}"
+            f"Всего - {sum} руб."
+            f"базовые - {base_today_expenses} руб. из"
+            f"{(now.day-monday.day) * await _get_budget_limit()} руб.")
+
+
+async def _month() -> str:
+    now = _get_now_datetime()
+    first_day_of_month = f'{now.year:04d}-{now.month:02d}-01'
+    sql = f"""SELECT category_codename, sum(amount) FROM expense
+             WHERE date(created) >= '{first_day_of_moth}' GROUP BY category_codename;"""
+    rows = await db.fetch_all(sql)
+    sum = 0
+    string = ''
+    for row in rows:
+        string += row["category_codename"] + ' - ' + str(row["sum(amount)"]) + "руб.\n"
+        sum += row["sum(amount)"]
+    sql = f"""SELECT sum(amount) FROM expense
+              WHERE date(created) >= '{first_day_of_month}' and category_codename in (select codename from category where is_base_expense=true)"""
+    rows = await db.fetch_one(sql)
+    base_today_expenses = rows["sum(amount)"] if rows["sum(amount)"] else 0
+    return (f"{string}"
+            f"Всего - {sum} руб."
+            f"базовые - {base_today_expenses} руб. из"
+            f"{now.day * await _get_budget_limit()} руб.")
+
+
 async def _delete_expense(id: int) -> None:
     sql = f"""DELETE FROM expense WHERE id={id}"""
     await db.execute(sql)

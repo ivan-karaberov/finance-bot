@@ -17,7 +17,10 @@ COMMAND_HANDLERS = {
     "delete_expense": handlers.delete_expense,
     "get_daily_limit": handlers.get_daily_limit,
     "set_daily_limit": handlers.set_daily_limit,
-    "last": handlers.last
+    "last": handlers.last,
+    "week": handlers.week, 
+    "month": handlers.month,
+    "day": handlers.day,
 }
 
 logging.basicConfig(

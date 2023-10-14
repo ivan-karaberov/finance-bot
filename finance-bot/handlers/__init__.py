@@ -5,6 +5,9 @@ from .get_daily_limit import get_daily_limit
 from .set_daily_limit import set_daily_limit
 from .delete_expense import delete_expense
 from .last import last
+from .week import week
+from .month import month
+from .day import day
 
 __all__ = [
     "start",
@@ -13,5 +16,8 @@ __all__ = [
     "delete_expense",
     "get_daily_limit", 
     "set_daily_limit",
-    "last"
+    "last", 
+    "week", 
+    "month",
+    "day"
 ]
