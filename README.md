@@ -28,5 +28,5 @@ cp finance-bot/.env.example finance-bot/.env
 
 ```bash
 poetry install
-poetry run python -m finance-bot
+poetry run python finance-bot
 ```
