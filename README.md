@@ -1,4 +1,4 @@
-# Telegram-бот для учета личных расходов
+# Finance Bot
 
 ## Команды бота:
 
@@ -22,7 +22,7 @@ cp finance-bot/.env.example finance-bot/.env
 ```
 
 Для управления зависимостями используется [poetry](https://python-poetry.org/),
-требуется Python 3.11.
+требуется Python 3.10.
 
 Установка зависимостей и запуск бота:
 
