@@ -138,7 +138,7 @@ async def _last() -> List[Expense]:
 async def _set_daily_limit(raw_message: str) -> None:
     """Обновляет дневной лимит на день"""
     message = _parse_message(raw_message, 1)
-    if sum is None:
+    if message is None:
         raise NotCorrectMessage
     sql = f"""UPDATE budget SET daily_limit={message.amount}
               WHERE codename = 'base'"""
